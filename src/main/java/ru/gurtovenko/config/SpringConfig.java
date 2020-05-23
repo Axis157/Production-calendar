@@ -3,6 +3,7 @@ package ru.gurtovenko.config;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,12 @@ import java.util.Properties;
 @PropertySource("classpath:persistence.properties")
 @EnableTransactionManagement
 public class SpringConfig {
+//    private final ApplicationContext applicationContext;
+//
+//    @Autowired
+//    public SpringConfig(ApplicationContext applicationContext) {
+//        this.applicationContext = applicationContext;
+//    }
 
     @Autowired
     private Environment env;
@@ -49,7 +56,6 @@ public class SpringConfig {
     }
 
     @Bean
-    @Autowired
     public HibernateTransactionManager transactionManager(
             SessionFactory sessionFactory) {
 

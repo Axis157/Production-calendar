@@ -6,7 +6,7 @@ plugins {
 group = 'ru.gurtovenko'
 version = ''
 sourceCompatibility = '1.8'
-mainClassName = 'ru.gurtovenko.Main'
+mainClassName = 'ru.gurtovenko.MainApp'
 
 repositories {
     mavenCentral()
@@ -22,7 +22,7 @@ task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'Gradle Jar File Example',
                 'Implementation-Version': version,
-                'Main-Class': 'ru.ibcon.MainApp'
+                'Main-Class': 'ru.gurtovenko.MainApp'
     }
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
@@ -40,6 +40,7 @@ dependencies {
     compile group: 'org.springframework', name: 'spring-jdbc', version: '5.2.5.RELEASE'
     compile group: 'com.h2database', name: 'h2', version: '1.4.200'
     compile group: 'org.hibernate.orm', name: 'hibernate-core', version: '6.0.0.Alpha5'
+//    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.16.Final'
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
     compile group: 'org.springframework', name: 'spring-orm', version: '5.2.5.RELEASE'
 }
