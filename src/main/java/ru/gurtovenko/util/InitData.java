@@ -1,10 +1,11 @@
 package ru.gurtovenko.util;
 
-import ru.gurtovenko.model.Department;
-import ru.gurtovenko.model.Employee;
-import ru.gurtovenko.model.Event;
+import ru.gurtovenko.model.*;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 
 import static ru.gurtovenko.MainApp.*;
 
@@ -58,6 +59,18 @@ public class InitData {
             department = getDepartmentService().getById(2L);
             employee3.setDepartment(department);
             getEmployeeService().add(employee3);
+        }
+        if(getCalendarService().getAll().isEmpty()){
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+//            GregorianCalendar gregorianCalendar = new GregorianCalendar(2020, GregorianCalendar.JANUARY, 1);
+//            Calendar calendar1 = new Calendar();
+//            calendar1.getId().setCaldate((Date) gregorianCalendar.getTime());
+//            Calendar calendar2 = new Calendar();
+//            System.out.println(calendar1.getId().getCaldate());
+//            System.out.println(calendar2.getId().getCaldate());
+//            for(Employee employee: getEmployeeService().getAll()){
+//
+//            }
         }
     }
 }

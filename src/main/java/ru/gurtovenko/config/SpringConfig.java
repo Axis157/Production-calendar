@@ -23,12 +23,6 @@ import java.util.Properties;
 @PropertySource("classpath:persistence.properties")
 @EnableTransactionManagement
 public class SpringConfig {
-//    private final ApplicationContext applicationContext;
-//
-//    @Autowired
-//    public SpringConfig(ApplicationContext applicationContext) {
-//        this.applicationContext = applicationContext;
-//    }
 
     @Autowired
     private Environment env;

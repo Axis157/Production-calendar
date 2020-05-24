@@ -3,17 +3,21 @@ package ru.gurtovenko.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import static ru.gurtovenko.MainApp.*;
+import ru.gurtovenko.model.Calendar;
+import ru.gurtovenko.model.CalendarId;
 import ru.gurtovenko.model.Department;
 import ru.gurtovenko.model.Employee;
-import ru.gurtovenko.service.DepartmentService;
 import ru.gurtovenko.util.InitData;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+
+import static ru.gurtovenko.MainApp.getDepartmentService;
+import static ru.gurtovenko.MainApp.getEmployeeService;
 
 public class MainLayoutController {
 
