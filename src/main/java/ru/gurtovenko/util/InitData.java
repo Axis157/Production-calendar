@@ -61,16 +61,25 @@ public class InitData {
             getEmployeeService().add(employee3);
         }
         if(getCalendarService().getAll().isEmpty()){
-//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-//            GregorianCalendar gregorianCalendar = new GregorianCalendar(2020, GregorianCalendar.JANUARY, 1);
-//            Calendar calendar1 = new Calendar();
-//            calendar1.getId().setCaldate((Date) gregorianCalendar.getTime());
-//            Calendar calendar2 = new Calendar();
-//            System.out.println(calendar1.getId().getCaldate());
-//            System.out.println(calendar2.getId().getCaldate());
-//            for(Employee employee: getEmployeeService().getAll()){
-//
-//            }
+            GregorianCalendar gregorianCalendar = new GregorianCalendar(2020, GregorianCalendar.JANUARY, 1);
+            System.out.println(gregorianCalendar.get(GregorianCalendar.YEAR));
+            for(Employee employee: getEmployeeService().getAll()){
+                while (gregorianCalendar.get(GregorianCalendar.YEAR) != 2021){
+                    Calendar calendar = new Calendar();
+                    CalendarId calendarId = new CalendarId();
+                    Date date = new Date(gregorianCalendar.getTimeInMillis());
+                    calendarId.setCaldate(date);
+                    calendarId.setIdEmployee(employee);
+                    calendar.setId(calendarId);
+                    calendar.setEvent(getEventService().getById(1L));
+
+                    getCalendarService().add(calendar);
+                    gregorianCalendar.add(GregorianCalendar.DATE, 1);
+                }
+                System.out.println(gregorianCalendar.get(GregorianCalendar.YEAR));
+                gregorianCalendar = new GregorianCalendar(2020, GregorianCalendar.JANUARY, 1);
+            }
+
         }
     }
 }
