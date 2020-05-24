@@ -13,6 +13,7 @@ import ru.gurtovenko.service.CalendarService;
 import ru.gurtovenko.service.DepartmentService;
 import ru.gurtovenko.service.EmployeeService;
 import ru.gurtovenko.service.EventService;
+import ru.gurtovenko.util.InitData;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -22,12 +23,12 @@ import java.util.List;
 public class MainApp extends Application {
 
     private static ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-    private Stage primaryStage;
-    private BorderPane rootPane;
     private static DepartmentService departmentService;
     private static EmployeeService employeeService;
     private static CalendarService calendarService;
     private static EventService eventService;
+    private Stage primaryStage;
+    private BorderPane rootPane;
 
     public static void main(String[] args) {
         launch(args);
@@ -35,13 +36,11 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException {
-        this.departmentService = context.getBean("departmentService", DepartmentService.class);
-        this.employeeService = context.getBean("employeeService", EmployeeService.class);
-        this.calendarService = context.getBean("calendarService", CalendarService.class);
-        this.eventService = context.getBean("eventService", EventService.class);
-//        Department department = new Department();
-//        department.setDepartment("department1");
-//        departmentService.add(department);
+        departmentService = context.getBean("departmentService", DepartmentService.class);
+        employeeService = context.getBean("employeeService", EmployeeService.class);
+        calendarService = context.getBean("calendarService", CalendarService.class);
+        eventService = context.getBean("eventService", EventService.class);
+        InitData.dataInDB();
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Производственный календарь");
         initRootLayout();

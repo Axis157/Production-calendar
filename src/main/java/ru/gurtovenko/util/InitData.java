@@ -2,16 +2,20 @@ package ru.gurtovenko.util;
 
 import ru.gurtovenko.model.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import static ru.gurtovenko.MainApp.*;
 
 public class InitData {
 
-    public static void dataInDB() throws SQLException {
+    public static void dataInDB() throws SQLException, IOException {
         if(getEventService().getAll().isEmpty()){
             for(Mark mark: Mark.values()){
                 Event event = new Event();
@@ -64,6 +68,8 @@ public class InitData {
             GregorianCalendar gregorianCalendar = new GregorianCalendar(2020, GregorianCalendar.JANUARY, 1);
             System.out.println(gregorianCalendar.get(GregorianCalendar.YEAR));
             for(Employee employee: getEmployeeService().getAll()){
+                String[] dayOfYear = workDayOrNot();
+                int index = 0;
                 while (gregorianCalendar.get(GregorianCalendar.YEAR) != 2021){
                     Calendar calendar = new Calendar();
                     CalendarId calendarId = new CalendarId();
@@ -71,9 +77,15 @@ public class InitData {
                     calendarId.setCaldate(date);
                     calendarId.setIdEmployee(employee);
                     calendar.setId(calendarId);
-                    calendar.setEvent(getEventService().getById(1L));
+                    if(dayOfYear[index].equalsIgnoreCase("0")){
+                        calendar.setEvent(getEventService().getById(1L));
+                    }
+                    else{
+                        calendar.setEvent(getEventService().getById(3L));
+                    }
 
                     getCalendarService().add(calendar);
+                    index++;
                     gregorianCalendar.add(GregorianCalendar.DATE, 1);
                 }
                 System.out.println(gregorianCalendar.get(GregorianCalendar.YEAR));
@@ -81,5 +93,15 @@ public class InitData {
             }
 
         }
+    }
+    public static String[] workDayOrNot() throws IOException {
+        URL url = new URL("https://isdayoff.ru/api/getdata?year=2020");
+        URLConnection urlConnection = url.openConnection();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        StringBuilder content = new StringBuilder();
+        while(reader.ready()){
+            content.append(reader.readLine());
+        }
+        return content.toString().split("");
     }
 }
