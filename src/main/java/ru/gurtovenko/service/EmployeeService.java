@@ -24,12 +24,12 @@ public class EmployeeService extends EntityDAO<Employee> {
         return list;
     }
 
-    public List<Employee> getAllByIdDepartment(Long id) throws SQLException {
+    public List<Employee> getAllByDepartment(Department id) throws SQLException {
         Session session = currentSession();
         Transaction transaction = session.beginTransaction();
         Query<Employee> query = currentSession().createQuery(
-                "from Employee where id_department = :id_department",Employee.class);
-        query.setParameter("id_department", id);
+                "from Employee as e where e.department = :department",Employee.class);
+        query.setParameter("department", id);
         List<Employee> list = query.list();
         transaction.commit();
         session.close();

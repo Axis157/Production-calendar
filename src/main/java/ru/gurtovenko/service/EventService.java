@@ -5,7 +5,6 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 import ru.gurtovenko.DAO.EntityDAO;
-import ru.gurtovenko.model.Department;
 import ru.gurtovenko.model.Event;
 
 import java.sql.SQLException;
@@ -25,9 +24,14 @@ public class EventService extends EntityDAO<Event> {
     }
 
     public Event getById(Long id) throws SQLException {
+        Session session = currentSession();
+        Transaction transaction = session.beginTransaction();
         Query<Event> query = currentSession().createQuery(
                 "from Event where id = :id",Event.class);
         query.setParameter("id", id);
-        return query.list().stream().findAny().orElse(null);
+        Event event = query.list().stream().findAny().orElse(null);
+        transaction.commit();
+        session.close();
+        return event;
     }
 }

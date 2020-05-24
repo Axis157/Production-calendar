@@ -44,16 +44,17 @@ public class MainLayoutController {
     }
 
     private void tab1ShowEmployee(Department department) throws SQLException {
-        System.out.println(department.getId());
         ObservableList<Employee> employees = FXCollections.observableArrayList(
-                getEmployeeService().getAllByIdDepartment(department.getId()));
+                getEmployeeService().getAllByDepartment(department));
         employeeTableViewTab1.setItems(employees);
         TableColumn<Employee, String> col1 = new TableColumn<>("ФИО");
         TableColumn<Employee, String> col2 = new TableColumn<>("Должность");
         TableColumn<Employee, Number> col3 = new TableColumn<>("Табельный №");
-        employeeTableViewTab1.getColumns().add(col1);
-        employeeTableViewTab1.getColumns().add(col2);
-        employeeTableViewTab1.getColumns().add(col3);
+        if(employeeTableViewTab1.getColumns().size() == 0){
+                employeeTableViewTab1.getColumns().add(col1);
+                employeeTableViewTab1.getColumns().add(col2);
+                employeeTableViewTab1.getColumns().add(col3);
+        }
         col1.setCellValueFactory(cell -> cell.getValue().fioProperty());
         col2.setCellValueFactory(cell -> cell.getValue().positionProperty());
         col3.setCellValueFactory(cell -> cell.getValue().tabelProperty());

@@ -2,6 +2,7 @@ package ru.gurtovenko.util;
 
 import ru.gurtovenko.model.Department;
 import ru.gurtovenko.model.Employee;
+import ru.gurtovenko.model.Event;
 
 import java.sql.SQLException;
 
@@ -10,6 +11,13 @@ import static ru.gurtovenko.MainApp.*;
 public class InitData {
 
     public static void dataInDB() throws SQLException {
+        if(getEventService().getAll().isEmpty()){
+            for(Mark mark: Mark.values()){
+                Event event = new Event();
+                event.setEvent(mark.name());
+                getEventService().add(event);
+            }
+        }
         if(getDepartmentService().getAll().isEmpty()){
             Department department1 = new Department();
             department1.setDepartment("Department");
@@ -32,22 +40,23 @@ public class InitData {
             employee1.setLastName("Иванов");
             employee1.setPosition("IT специалист");
             employee1.setTabel(1L);
-            employee1.setDepartment(getDepartmentService().getById(1L));
+            Department department = getDepartmentService().getById(1L);
+            employee1.setDepartment(department);
+            getEmployeeService().add(employee1);
 
             employee2.setFirstName("Роман");
             employee2.setLastName("Романов");
             employee2.setPosition("IT специалист");
             employee2.setTabel(2L);
-            employee1.setDepartment(getDepartmentService().getById(1L));
+            employee2.setDepartment(department);
+            getEmployeeService().add(employee2);
 
             employee3.setFirstName("Сергей");
             employee3.setLastName("Сергеевич");
             employee3.setPosition("Администратор");
             employee3.setTabel(3L);
-            employee1.setDepartment(getDepartmentService().getById(2L));
-
-            getEmployeeService().add(employee1);
-            getEmployeeService().add(employee2);
+            department = getDepartmentService().getById(2L);
+            employee3.setDepartment(department);
             getEmployeeService().add(employee3);
         }
     }
