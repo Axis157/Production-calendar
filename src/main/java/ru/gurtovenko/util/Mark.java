@@ -1,7 +1,7 @@
 package ru.gurtovenko.util;
 
 public enum Mark {
-    Я,
+    Р,
     Н,
     В,
     Рв,
