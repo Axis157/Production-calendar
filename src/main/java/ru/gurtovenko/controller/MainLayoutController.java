@@ -96,8 +96,8 @@ public class MainLayoutController {
 
             for(int z = 0; z < gregorianCalendar.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); z++){
                 TableColumn<EntityJavaFX, String> markColumn = new TableColumn<>(z+1+"");
-//                int finalZ = z;
-//                markColumn.setCellValueFactory(cell -> cell.getValue().propertyMark(finalZ));
+                int finalZ = z;
+                markColumn.setCellValueFactory(cell -> cell.getValue().propertyMark(finalZ));
                 tableEmployee.getColumns().add(markColumn);
             }
 

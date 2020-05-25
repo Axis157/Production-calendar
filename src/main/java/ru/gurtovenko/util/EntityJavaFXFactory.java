@@ -3,14 +3,13 @@ package ru.gurtovenko.util;
 import javafx.beans.property.SimpleStringProperty;
 import ru.gurtovenko.model.Calendar;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ru.gurtovenko.MainApp.*;
+import static ru.gurtovenko.MainApp.getCalendarService;
 
 public class EntityJavaFXFactory {
 

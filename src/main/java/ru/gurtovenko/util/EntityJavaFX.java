@@ -5,8 +5,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class EntityJavaFX {
 
@@ -71,11 +70,22 @@ public class EntityJavaFX {
     }
 
     public SimpleStringProperty totalProperty() {
-        String result = "";
+        Map<String, Integer> resultMap = new HashMap<>();
         for(SimpleStringProperty s: dateMark){
-            result += s.get();
+            if(!resultMap.containsKey(s.get())){
+                resultMap.put(s.get(),1);
+            }
+            else{
+                Integer newValue = resultMap.get(s.get()) + 1;
+                resultMap.put(s.get(),newValue);
+            }
         }
-        this.total = new SimpleStringProperty(result);
+        String str = "";
+        for(Map.Entry<String, Integer> pair: resultMap.entrySet()){
+            str += ";"+pair.getKey()+"("+pair.getValue()+")";
+        }
+        this.total = new SimpleStringProperty(str.substring(1));
+
         return this.total;
     }
 
