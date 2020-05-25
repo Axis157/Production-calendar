@@ -161,4 +161,30 @@ public class MainLayoutController {
 //            tableEmployee.getColumns().add(totalCol);
 //        }
     }
+    private void departmentToEmployee(Department department) throws SQLException {
+        for(int i = 0; i < 12; i++){
+            TableView<EntityJavaFX> tableEmployee = tableMap.get(i);
+            int countColumns = tableEmployee.getColumns().size();
+            ObservableList<EntityJavaFX> entityJavaFXObservableList =
+                    FXCollections.observableList(EntityJavaFXFactory.getEntityJavaFX(i+1, department));
+            tableEmployee.setItems(entityJavaFXObservableList);
+
+            //Основные три колонки
+            TableColumn<EntityJavaFX, String> columnString = (TableColumn<EntityJavaFX, String>) tableEmployee.getColumns().get(0);
+            columnString.setCellValueFactory(cell -> cell.getValue().fullNameProperty());
+            columnString = (TableColumn<EntityJavaFX, String>) tableEmployee.getColumns().get(1);
+            columnString.setCellValueFactory(cell -> cell.getValue().positionProperty());
+            TableColumn<EntityJavaFX, Number> columnLong = (TableColumn<EntityJavaFX, Number>) tableEmployee.getColumns().get(2);
+            columnLong.setCellValueFactory(cell -> cell.getValue().tabelProperty());
+
+            for(int z = 3; z < (countColumns - 1); z++){
+                columnString = (TableColumn<EntityJavaFX, String>) tableEmployee.getColumns().get(z);
+                int finalZ = z;
+                columnString.setCellValueFactory(cell -> cell.getValue().propertyMark(finalZ - 3));
+            }
+
+            columnString = (TableColumn<EntityJavaFX, String>) tableEmployee.getColumns().get(countColumns - 1);
+            columnString.setCellValueFactory(cell -> cell.getValue().totalProperty());
+        }
+    }
 }
