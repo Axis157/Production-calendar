@@ -2,9 +2,7 @@ package ru.gurtovenko.util;
 
 import ru.gurtovenko.model.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Date;
@@ -95,13 +93,25 @@ public class InitData {
         }
     }
     public static String[] workDayOrNot() throws IOException {
-        URL url = new URL("https://isdayoff.ru/api/getdata?year=2020");
-        URLConnection urlConnection = url.openConnection();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-        StringBuilder content = new StringBuilder();
-        while(reader.ready()){
-            content.append(reader.readLine());
+        File file = new File("./src/main/resources/workornot.txt");
+        if(file.length() != 0){
+            FileReader fileReader = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fileReader);
+            String s = "";
+            while(reader.ready()){
+                s += reader.readLine();
+            }
+            return s.split("");
         }
-        return content.toString().split("");
+        else{
+            URL url = new URL("https://isdayoff.ru/api/getdata?year=2020");
+            URLConnection urlConnection = url.openConnection();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            StringBuilder content = new StringBuilder();
+            while(reader.ready()){
+                content.append(reader.readLine());
+            }
+            return content.toString().split("");
+        }
     }
 }

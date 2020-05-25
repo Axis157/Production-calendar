@@ -16,7 +16,7 @@ import ru.gurtovenko.service.EmployeeService;
 import ru.gurtovenko.service.EventService;
 import ru.gurtovenko.util.InitData;
 
-import java.io.IOException;
+import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +37,8 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException {
+//        File file = new File("./src/main/resources/workornot.txt");
+//        System.out.println(file.length() == 0);
         departmentService = context.getBean("departmentService", DepartmentService.class);
         employeeService = context.getBean("employeeService", EmployeeService.class);
         calendarService = context.getBean("calendarService", CalendarService.class);
