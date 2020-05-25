@@ -1,30 +1,22 @@
-package ru.gurtovenko.model.entityfx;
+package ru.gurtovenko.util;
 
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class EmployeeJavaFX {
+public class EntityJavaFX {
 
     SimpleStringProperty fullName = new SimpleStringProperty();
     SimpleStringProperty position = new SimpleStringProperty();
     SimpleLongProperty tabel = new SimpleLongProperty();
-    Map<Integer,SimpleStringProperty> dateMark = new HashMap<>();
+    List<SimpleStringProperty> dateMark = new ArrayList<>();
     SimpleStringProperty total = new SimpleStringProperty();
-    int month;
 
-    public EmployeeJavaFX() {
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
+    public EntityJavaFX() {
     }
 
     public String getFullName() {
@@ -63,14 +55,15 @@ public class EmployeeJavaFX {
         this.tabel.set(tabel);
     }
 
-    public Map<Integer,SimpleStringProperty> getDateMark() {
+    public List<SimpleStringProperty> getDateMark() {
         return dateMark;
-    }
-    public void setDateMark(int month, String mark){
-        dateMark.put(month,new SimpleStringProperty(mark));
     }
     public SimpleStringProperty propertyMark(int i){
         return dateMark.get(i);
+    }
+
+    public void setDateMark(List<SimpleStringProperty> dateMark) {
+        this.dateMark = dateMark;
     }
 
     public String getTotal() {
@@ -78,22 +71,11 @@ public class EmployeeJavaFX {
     }
 
     public SimpleStringProperty totalProperty() {
-        Map<String, Integer> resultMap = new HashMap<>();
-        for(SimpleStringProperty s: getDateMark().values()){
-            if(!resultMap.containsKey(s.get())){
-                resultMap.put(s.get(),1);
-            }
-            else{
-                Integer newValue = resultMap.get(s.get()) + 1;
-                resultMap.put(s.get(),newValue);
-            }
+        String result = "";
+        for(SimpleStringProperty s: dateMark){
+            result += s.get();
         }
-        String str = "";
-        for(Map.Entry<String, Integer> pair: resultMap.entrySet()){
-            str += ";"+pair.getKey()+"("+pair.getValue()+")";
-        }
-        this.total = new SimpleStringProperty(str.substring(1));
-
+        this.total = new SimpleStringProperty(result);
         return this.total;
     }
 
