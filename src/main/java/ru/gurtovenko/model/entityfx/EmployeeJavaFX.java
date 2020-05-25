@@ -1,4 +1,4 @@
-package ru.gurtovenko.util;
+package ru.gurtovenko.model.entityfx;
 
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -7,15 +7,24 @@ import javafx.beans.property.StringProperty;
 
 import java.util.*;
 
-public class EntityJavaFX {
+public class EmployeeJavaFX {
 
     SimpleStringProperty fullName = new SimpleStringProperty();
     SimpleStringProperty position = new SimpleStringProperty();
     SimpleLongProperty tabel = new SimpleLongProperty();
-    List<SimpleStringProperty> dateMark = new ArrayList<>();
+    Map<Integer,SimpleStringProperty> dateMark = new HashMap<>();
     SimpleStringProperty total = new SimpleStringProperty();
+    int month;
 
-    public EntityJavaFX() {
+    public EmployeeJavaFX() {
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
     }
 
     public String getFullName() {
@@ -54,15 +63,14 @@ public class EntityJavaFX {
         this.tabel.set(tabel);
     }
 
-    public List<SimpleStringProperty> getDateMark() {
+    public Map<Integer,SimpleStringProperty> getDateMark() {
         return dateMark;
+    }
+    public void setDateMark(int month, String mark){
+        dateMark.put(month,new SimpleStringProperty(mark));
     }
     public SimpleStringProperty propertyMark(int i){
         return dateMark.get(i);
-    }
-
-    public void setDateMark(List<SimpleStringProperty> dateMark) {
-        this.dateMark = dateMark;
     }
 
     public String getTotal() {
@@ -71,7 +79,7 @@ public class EntityJavaFX {
 
     public SimpleStringProperty totalProperty() {
         Map<String, Integer> resultMap = new HashMap<>();
-        for(SimpleStringProperty s: dateMark){
+        for(SimpleStringProperty s: getDateMark().values()){
             if(!resultMap.containsKey(s.get())){
                 resultMap.put(s.get(),1);
             }

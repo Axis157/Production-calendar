@@ -52,7 +52,7 @@ public class MainApp extends Application {
         rootPane = loader.load();
         Scene scene = new Scene(rootPane);
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(400);
+        primaryStage.setMinHeight(500);
         primaryStage.setMinWidth(800);
         primaryStage.show();
     }
