@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.gurtovenko.config.SpringConfig;
+import ru.gurtovenko.model.Calendar;
 import ru.gurtovenko.model.Department;
 import ru.gurtovenko.service.CalendarService;
 import ru.gurtovenko.service.DepartmentService;

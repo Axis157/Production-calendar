@@ -34,6 +34,7 @@ public class Department {
     public void setDepartment(String department) {
         this.department = department;
     }
+
     public StringProperty departmentProperty(){
         return new SimpleStringProperty(department);
     }

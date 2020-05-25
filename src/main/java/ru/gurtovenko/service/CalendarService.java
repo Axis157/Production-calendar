@@ -23,15 +23,17 @@ public class CalendarService extends EntityDAO<Calendar> {
         return list;
     }
 
-    public Calendar getById(Long id) throws SQLException {
+    public List<Calendar> getByMonth(Integer id) throws SQLException {
         Session session = currentSession();
         Transaction transaction = session.beginTransaction();
-        Query<Calendar> query = currentSession().createQuery(
-                "from Calendar where id = :id",Calendar.class);
+        Query<Calendar> query = session.createNativeQuery(
+                "SELECT * FROM \"сalendar\" WHERE MONTH(\"caldate\") = :id").addEntity(Calendar.class);
+//        Query<Calendar> query = currentSession().createQuery(
+//                "from Calendar where id = :id",Calendar.class);
         query.setParameter("id", id);
-        Calendar calendar = query.list().stream().findAny().orElse(null);
+        List<Calendar> calendars = query.list();
         transaction.commit();
         session.close();
-        return calendar;
+        return calendars;
     }
 }
