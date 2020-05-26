@@ -8,7 +8,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import static ru.gurtovenko.MainApp.*;
 
@@ -84,8 +86,10 @@ public class InitData {
         }
         if(getCalendarService().getAll().isEmpty()){
 //            java.util.Date date1 = new java.util.Date();
-//            GregorianCalendar gregorianCalendar = new GregorianCalendar(2020, GregorianCalendar.JANUARY, 1);
-//            for(Employee employee: getEmployeeService().getAll()){
+//            GregorianCalendar gregorianCalendar = new GregorianCalendar(
+//                    2020, GregorianCalendar.JANUARY, 1);
+//            List<Employee> employeeList = new ArrayList<>(getEmployeeService().getAll());
+//            for(Employee employee: employeeList){
 //                String[] dayOfYear = workDayOrNot();
 //                int index = 0;
 //                while (gregorianCalendar.get(GregorianCalendar.YEAR) != 2021){
