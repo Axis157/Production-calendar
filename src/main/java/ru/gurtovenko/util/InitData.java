@@ -1,12 +1,13 @@
 package ru.gurtovenko.util;
 
+import org.w3c.dom.ls.LSOutput;
 import ru.gurtovenko.model.*;
 
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.sql.Date;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import static ru.gurtovenko.MainApp.*;
@@ -15,13 +16,17 @@ public class InitData {
 
     public static void dataInDB() throws SQLException, IOException {
         if(getEventService().getAll().isEmpty()){
+//            java.util.Date date1 = new java.util.Date();
             for(Mark mark: Mark.values()){
                 Event event = new Event();
                 event.setEvent(mark.name());
                 getEventService().add(event);
             }
+//            java.util.Date date2 = new java.util.Date();
+//            System.out.println("Event: " + (date2.getTime() - date1.getTime()));
         }
         if(getDepartmentService().getAll().isEmpty()){
+//            java.util.Date date1 = new java.util.Date();
             Department department1 = new Department();
             department1.setDepartment("Department");
             getDepartmentService().add(department1);
@@ -33,11 +38,15 @@ public class InitData {
             getDepartmentService().add(department2);
             department2.setDepartment(department2.getDepartment()+department2.getId());
             getDepartmentService().update(department2);
+//            java.util.Date date2 = new java.util.Date();
+//            System.out.println("Department: " + (date2.getTime() - date1.getTime()));
         }
         if(getEmployeeService().getAll().isEmpty()){
+//            java.util.Date date1 = new java.util.Date();
             Employee employee1 = new Employee();
             Employee employee2 = new Employee();
             Employee employee3 = new Employee();
+            Employee employee4 = new Employee();
 
             employee1.setFirstName("Иван");
             employee1.setLastName("Иванов");
@@ -61,57 +70,97 @@ public class InitData {
             department = getDepartmentService().getById(2L);
             employee3.setDepartment(department);
             getEmployeeService().add(employee3);
+
+            employee4.setFirstName("Андрей");
+            employee4.setLastName("Андреевич");
+            employee4.setPosition("Администратор");
+            employee4.setTabel(4L);
+            department = getDepartmentService().getById(2L);
+            employee4.setDepartment(department);
+            getEmployeeService().add(employee4);
+
+//            java.util.Date date2 = new java.util.Date();
+//            System.out.println("Employee: " + (date2.getTime() - date1.getTime()));
         }
         if(getCalendarService().getAll().isEmpty()){
-            GregorianCalendar gregorianCalendar = new GregorianCalendar(2020, GregorianCalendar.JANUARY, 1);
-            System.out.println(gregorianCalendar.get(GregorianCalendar.YEAR));
-            for(Employee employee: getEmployeeService().getAll()){
+//            java.util.Date date1 = new java.util.Date();
+//            GregorianCalendar gregorianCalendar = new GregorianCalendar(2020, GregorianCalendar.JANUARY, 1);
+//            for(Employee employee: getEmployeeService().getAll()){
+//                String[] dayOfYear = workDayOrNot();
+//                int index = 0;
+//                while (gregorianCalendar.get(GregorianCalendar.YEAR) != 2021){
+//                    Calendar calendar = new Calendar();
+//                    CalendarId calendarId = new CalendarId();
+//                    Date date = new Date(gregorianCalendar.getTimeInMillis());
+//                    calendarId.setCaldate(date);
+//                    calendarId.setIdEmployee(employee);
+//                    calendar.setId(calendarId);
+//                    if(dayOfYear[index].equalsIgnoreCase("0")){
+//                        calendar.setEvent(getEventService().getById(1L));
+//                    }
+//                    else{
+//                        calendar.setEvent(getEventService().getById(3L));
+//                    }
+//
+//                    getCalendarService().add(calendar);
+//                    index++;
+//                    gregorianCalendar.add(GregorianCalendar.DATE, 1);
+//                }
+//                System.out.println(employee.getFirstName());
+//                gregorianCalendar = new GregorianCalendar(2020, GregorianCalendar.JANUARY, 1);
+//            }
+//            java.util.Date date2 = new java.util.Date();
+//            System.out.println("Calendar: " + (date2.getTime() - date1.getTime()));
+            for(int i = 1; i < 5; i++){
+//                java.util.Date date1 = new java.util.Date();
+                Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(
+                        "INSERT INTO \"calendar\" VALUES(?, ?, ?)");
+                GregorianCalendar gregorianCalendar = new GregorianCalendar(
+                        2020, GregorianCalendar.JANUARY, 1);
                 String[] dayOfYear = workDayOrNot();
                 int index = 0;
                 while (gregorianCalendar.get(GregorianCalendar.YEAR) != 2021){
-                    Calendar calendar = new Calendar();
-                    CalendarId calendarId = new CalendarId();
                     Date date = new Date(gregorianCalendar.getTimeInMillis());
-                    calendarId.setCaldate(date);
-                    calendarId.setIdEmployee(employee);
-                    calendar.setId(calendarId);
+                    statement.setDate(1, date);
+                    statement.setLong(2, i);
                     if(dayOfYear[index].equalsIgnoreCase("0")){
-                        calendar.setEvent(getEventService().getById(1L));
+                        statement.setLong(3, 1L);
                     }
                     else{
-                        calendar.setEvent(getEventService().getById(3L));
+                        statement.setLong(3, 3L);
                     }
+                    statement.executeUpdate();
 
-                    getCalendarService().add(calendar);
                     index++;
                     gregorianCalendar.add(GregorianCalendar.DATE, 1);
                 }
-                System.out.println(gregorianCalendar.get(GregorianCalendar.YEAR));
-                gregorianCalendar = new GregorianCalendar(2020, GregorianCalendar.JANUARY, 1);
+                statement.close();
+                connection.close();
+//                java.util.Date date2 = new java.util.Date();
+//                System.out.println("Calendar JDBC: " + (date2.getTime() - date1.getTime()));
             }
-
         }
     }
     public static String[] workDayOrNot() throws IOException {
-        File file = new File("./src/main/resources/workornot.txt");
-        if(file.length() != 0){
-            FileReader fileReader = new FileReader(file);
-            BufferedReader reader = new BufferedReader(fileReader);
-            String s = "";
-            while(reader.ready()){
-                s += reader.readLine();
-            }
-            return s.split("");
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(ClassLoader.getSystemResourceAsStream("workornot.txt")));
+        String s = "";
+        while(reader.ready()){
+            s += reader.readLine();
         }
-        else{
-            URL url = new URL("https://isdayoff.ru/api/getdata?year=2020");
-            URLConnection urlConnection = url.openConnection();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            StringBuilder content = new StringBuilder();
-            while(reader.ready()){
-                content.append(reader.readLine());
-            }
-            return content.toString().split("");
+        reader.close();
+        String[] result = s.split("");
+        return result;
+    }
+    public static Connection getConnection(){
+        Connection connection = null;
+        try {
+            Class.forName("org.h2.Driver"); //Проверяет наличие JDBC драйвера для работы с БД
+            connection = DriverManager.getConnection("jdbc:h2:./db/data", "sa", ""); //соед. с БД
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
+        return connection;
     }
 }

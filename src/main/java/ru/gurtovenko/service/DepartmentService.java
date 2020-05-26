@@ -4,6 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.gurtovenko.DAO.EntityDAO;
 import ru.gurtovenko.model.Department;
 
@@ -14,9 +16,10 @@ import java.util.List;
 public class DepartmentService extends EntityDAO<Department> {
 
     public List<Department> getAll() throws SQLException {
+//        Session session = getSessionFactory().getCurrentSession();
         Session session = currentSession();
         Transaction transaction = session.beginTransaction();
-        List<Department> list = currentSession().createQuery("from Department",
+        List<Department> list = session.createQuery("from Department",
                 Department.class).list();
         transaction.commit();
         session.close();
@@ -24,12 +27,13 @@ public class DepartmentService extends EntityDAO<Department> {
     }
 
     public Department getById(Long id) throws SQLException {
+//        Session session = getSessionFactory().getCurrentSession();
         Session session = currentSession();
         Transaction transaction = session.beginTransaction();
-        Query<Department> query = currentSession().createQuery(
+        Query<Department> query = session.createQuery(
                 "from Department where id = :id",Department.class);
         query.setParameter("id", id);
-        Department department = query.list().stream().findAny().orElse(null);
+        Department department = query.getSingleResult();
         transaction.commit();
         session.close();
         return department;

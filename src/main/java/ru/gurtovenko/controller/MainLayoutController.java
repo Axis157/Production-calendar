@@ -15,7 +15,6 @@ import java.util.*;
 import static ru.gurtovenko.MainApp.getDepartmentService;
 
 public class MainLayoutController {
-
     @FXML
     private TableView<DepartmentJavaFX> departmentTableView;
     @FXML

@@ -3,7 +3,7 @@ package ru.gurtovenko.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "сalendar")
+@Table(name = "calendar")
 public class Calendar {
 
 

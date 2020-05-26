@@ -4,6 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.gurtovenko.DAO.EntityDAO;
 import ru.gurtovenko.model.Event;
 
@@ -14,9 +16,10 @@ import java.util.List;
 public class EventService extends EntityDAO<Event> {
 
     public List<Event> getAll() throws SQLException {
+//        Session session = getSessionFactory().getCurrentSession();
         Session session = currentSession();
         Transaction transaction = session.beginTransaction();
-        List<Event> list = currentSession().createQuery("from Event",
+        List<Event> list = session.createQuery("from Event",
                 Event.class).list();
         transaction.commit();
         session.close();
@@ -24,12 +27,13 @@ public class EventService extends EntityDAO<Event> {
     }
 
     public Event getById(Long id) throws SQLException {
+//        Session session = getSessionFactory().getCurrentSession();
         Session session = currentSession();
         Transaction transaction = session.beginTransaction();
-        Query<Event> query = currentSession().createQuery(
+        Query<Event> query = session.createQuery(
                 "from Event where id = :id",Event.class);
         query.setParameter("id", id);
-        Event event = query.list().stream().findAny().orElse(null);
+        Event event = query.getSingleResult();
         transaction.commit();
         session.close();
         return event;

@@ -27,7 +27,7 @@ public class Employee {
     @Column(name = "tabel")
     private Long tabel;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_department")
     private Department department;
 

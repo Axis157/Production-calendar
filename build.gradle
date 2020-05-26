@@ -12,11 +12,8 @@ repositories {
     mavenCentral()
     jcenter()
 }
-compileJava.options.encoding = 'UTF-8'
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
+compileJava.options.encoding = 'UTF-8'
 
 task fatJar(type: Jar) {
     manifest {
@@ -35,6 +32,8 @@ javafx {
 }
 
 dependencies {
+//    compile group: 'org.openjfx', name: 'javafx-controls', version: '15-ea+5'
+//    compile group: 'org.openjfx', name: 'javafx-fxml', version: '15-ea+5'
     compile group: 'org.springframework', name: 'spring-context', version: '5.2.5.RELEASE'
     compile group: 'org.springframework', name: 'spring-core', version: '5.2.5.RELEASE'
     compile group: 'org.springframework', name: 'spring-jdbc', version: '5.2.5.RELEASE'

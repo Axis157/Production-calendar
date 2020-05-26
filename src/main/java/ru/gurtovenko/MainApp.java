@@ -21,7 +21,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainApp extends Application {
+public class MainApp extends Application implements Runnable{
 
     private static ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
     private static DepartmentService departmentService;
@@ -30,6 +30,7 @@ public class MainApp extends Application {
     private static EventService eventService;
     private Stage primaryStage;
     private BorderPane rootPane;
+
 
     public static void main(String[] args) {
         launch(args);
@@ -43,9 +44,9 @@ public class MainApp extends Application {
         employeeService = context.getBean("employeeService", EmployeeService.class);
         calendarService = context.getBean("calendarService", CalendarService.class);
         eventService = context.getBean("eventService", EventService.class);
-        InitData.dataInDB();
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Производственный календарь");
+        InitData.dataInDB();
         initRootLayout();
     }
 
@@ -77,5 +78,14 @@ public class MainApp extends Application {
 
     public static EventService getEventService() {
         return eventService;
+    }
+
+    @Override
+    public void run() {
+        try {
+            initRootLayout();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
