@@ -2,8 +2,10 @@ package ru.gurtovenko.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import ru.gurtovenko.util.EntityJavaFX;
 
 import javax.persistence.*;
+import java.util.Map;
 
 @Entity
 @Table(name = "department")
@@ -15,6 +17,9 @@ public class Department {
 
     @Column(name = "department")
     private String department;
+
+    @Transient
+    private Map<Integer, Map<Integer, EntityJavaFX>> entityJavaFX;
 
     public Department() {
     }
@@ -37,5 +42,13 @@ public class Department {
 
     public StringProperty departmentProperty(){
         return new SimpleStringProperty(department);
+    }
+
+    public Map<Integer, Map<Integer, EntityJavaFX>> getEntityJavaFX() {
+        return entityJavaFX;
+    }
+
+    public void setEntityJavaFX(Map<Integer, Map<Integer, EntityJavaFX>> entityJavaFX) {
+        this.entityJavaFX = entityJavaFX;
     }
 }

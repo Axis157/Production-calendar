@@ -6,17 +6,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import ru.gurtovenko.model.Department;
-import ru.gurtovenko.model.entityfx.DepartmentJavaFX;
-import ru.gurtovenko.model.entityfx.EmployeeJavaFX;
-import ru.gurtovenko.util.DepartmentJavaFXFactory;
-import ru.gurtovenko.util.EmployeeJavaFXFactory;
+import ru.gurtovenko.util.EntityJavaFX;
+import ru.gurtovenko.util.EntityJavaFXFactory;
 
 import java.sql.SQLException;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import static ru.gurtovenko.MainApp.*;
+import static ru.gurtovenko.MainApp.getDepartmentService;
 
 public class MainLayoutController {
 
@@ -58,7 +54,10 @@ public class MainLayoutController {
         departmentTableView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     try {
+//                        Date date1 = new Date();
                         departmentToEmployee(newValue);
+//                        Date date2 = new Date();
+//                        System.out.println(date2.getTime() - date1.getTime());
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
@@ -165,8 +164,10 @@ public class MainLayoutController {
         for(int i = 0; i < 12; i++){
             TableView<EntityJavaFX> tableEmployee = tableMap.get(i);
             int countColumns = tableEmployee.getColumns().size();
+//            ObservableList<EntityJavaFX> entityJavaFXObservableList =
+//                    FXCollections.observableList(EntityJavaFXFactory.getEntityJavaFX(i+1, department));
             ObservableList<EntityJavaFX> entityJavaFXObservableList =
-                    FXCollections.observableList(EntityJavaFXFactory.getEntityJavaFX(i+1, department));
+                    FXCollections.observableList(new ArrayList<>(department.getEntityJavaFX().get(i).values()));
             tableEmployee.setItems(entityJavaFXObservableList);
 
             //Основные три колонки
