@@ -16,34 +16,33 @@ import static ru.gurtovenko.MainApp.getDepartmentService;
 
 public class MainLayoutController {
     @FXML
-    private TableView<DepartmentJavaFX> departmentTableView;
+    private TableView<Department> departmentTableView;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab1;
+    private TableView<EntityJavaFX> employeeTableViewTab1;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab2;
+    private TableView<EntityJavaFX> employeeTableViewTab2;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab3;
+    private TableView<EntityJavaFX> employeeTableViewTab3;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab4;
+    private TableView<EntityJavaFX> employeeTableViewTab4;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab5;
+    private TableView<EntityJavaFX> employeeTableViewTab5;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab6;
+    private TableView<EntityJavaFX> employeeTableViewTab6;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab7;
+    private TableView<EntityJavaFX> employeeTableViewTab7;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab8;
+    private TableView<EntityJavaFX> employeeTableViewTab8;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab9;
+    private TableView<EntityJavaFX> employeeTableViewTab9;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab10;
+    private TableView<EntityJavaFX> employeeTableViewTab10;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab11;
+    private TableView<EntityJavaFX> employeeTableViewTab11;
     @FXML
-    private TableView<EmployeeJavaFX> employeeTableViewTab12;
+    private TableView<EntityJavaFX> employeeTableViewTab12;
 
-    private Map<Integer, TableView<EmployeeJavaFX>> tableMap = new HashMap<>();
-    private ObservableList<DepartmentJavaFX> departmentJavaFXES;
+    private Map<Integer, TableView<EntityJavaFX>> tableMap = new HashMap<>();
 
 
     @FXML
@@ -80,84 +79,42 @@ public class MainLayoutController {
     }
     private void initColumns() throws SQLException {
         //Department table
-        departmentJavaFXES = FXCollections.observableArrayList(DepartmentJavaFXFactory.getEntityJavaFX());
-        departmentTableView.setItems(departmentJavaFXES);
-        TableColumn<DepartmentJavaFX, String> departmentCol = new TableColumn<>("Департаменты");
-        departmentCol.setCellValueFactory(cell -> cell.getValue().departmentProperty());
+        ObservableList<Department> departments = FXCollections.observableList(getDepartmentService().getAll());
+        departmentTableView.setItems(departments);
+        TableColumn<Department, String> departmentCol = new TableColumn<>("Департаменты");
         departmentTableView.getColumns().add(departmentCol);
+        departmentCol.setCellValueFactory(cell -> cell.getValue().departmentProperty());
+
+        for(Department department: departments){
+            department.setEntityJavaFX(new HashMap<>());
+            for(int i = 0; i < 12; i++){
+                department.getEntityJavaFX().put(i, new HashMap<>());
+                int index = 0;
+                for(EntityJavaFX entityJavaFX: EntityJavaFXFactory.getEntityJavaFX(i+1, department)){
+                    department.getEntityJavaFX().get(i).put(index, entityJavaFX);
+                    index++;
+                }
+            }
+        }
+
         for(int i = 0; i < 12; i++){
             GregorianCalendar gregorianCalendar = new GregorianCalendar(2020, i, 1);
-            TableView<EmployeeJavaFX> tableEmployee = tableMap.get(i);
-
+            TableView<EntityJavaFX> tableEmployee = tableMap.get(i);
             //Основные три колонки
-            TableColumn<EmployeeJavaFX, String> fullNameCol = new TableColumn<>("ФИО");
-            TableColumn<EmployeeJavaFX, String> positionCol = new TableColumn<>("Должность");
-            TableColumn<EmployeeJavaFX, Number> tabelCol = new TableColumn<>("Табельный №");
+            TableColumn<EntityJavaFX, String> fullNameCol = new TableColumn<>("ФИО");
+            TableColumn<EntityJavaFX, String> positionCol = new TableColumn<>("Должность");
+            TableColumn<EntityJavaFX, Number> tabelCol = new TableColumn<>("Табельный №");
             tableEmployee.getColumns().addAll(fullNameCol, positionCol, tabelCol);
 
             for(int z = 0; z < gregorianCalendar.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); z++){
-                TableColumn<EmployeeJavaFX, String> markColumn = new TableColumn<>(z+1+"");
+                TableColumn<EntityJavaFX, String> markColumn = new TableColumn<>(z+1+"");
                 tableEmployee.getColumns().add(markColumn);
             }
 
-            TableColumn<EmployeeJavaFX, String> totalCol = new TableColumn<>("Итого");
+            TableColumn<EntityJavaFX, String> totalCol = new TableColumn<>("Итого");
             tableEmployee.getColumns().add(totalCol);
         }
-    }
 
-    private void departmentToEmployee(DepartmentJavaFX departmentJavaFX) throws SQLException {
-        for(int i = 0; i < 12; i++){
-            TableView<EmployeeJavaFX> tableEmployee = tableMap.get(i);
-            int countColumns = tableEmployee.getColumns().size();
-            System.out.println(i);
-            tableEmployee.setItems(departmentJavaFX.getEmployeeJavaFX(i));
-            System.out.println(departmentJavaFX.getEmployeeJavaFX(i));
-            //заполнение основных столбцов
-            TableColumn<EmployeeJavaFX, String> column = (TableColumn<EmployeeJavaFX, String>) tableEmployee.getColumns().get(0);
-            column.setCellValueFactory(cell -> cell.getValue().fullNameProperty());
-            column = (TableColumn<EmployeeJavaFX, String>) tableEmployee.getColumns().get(1);
-            column.setCellValueFactory(cell -> cell.getValue().positionProperty());
-            TableColumn<EmployeeJavaFX, Number> columnLong = (TableColumn<EmployeeJavaFX, Number>) tableEmployee.getColumns().get(2);
-            columnLong.setCellValueFactory(cell -> cell.getValue().tabelProperty());
-            //заполнение отметок
-            for(int z = 3; z < (countColumns - 1); z++){
-                int finalZ = z - 3;
-                column = (TableColumn<EmployeeJavaFX, String>) tableEmployee.getColumns().get(z);
-                int finalZ1 = z;
-                column.setCellValueFactory(cell -> cell.getValue().propertyMark(finalZ1 - 3));
-            }
-            //заполнение Итого
-            column = (TableColumn<EmployeeJavaFX, String>) tableEmployee.getColumns().get(countColumns-1);
-            column.setCellValueFactory(cell -> cell.getValue().totalProperty());
-        }
-
-//        for(int i = 0; i < 12; i++){
-//            GregorianCalendar gregorianCalendar = new GregorianCalendar(2020, i, 1);
-//            TableView<EmployeeJavaFX> tableEmployee = tableMap.get(i);
-//            ObservableList<EmployeeJavaFX> entityJavaFXObservableList =
-//                    FXCollections.observableList(EmployeeJavaFXFactory.getEntityJavaFX(i+1, department));
-//            tableEmployee.setItems(entityJavaFXObservableList);
-//
-//            //Основные три колонки
-//            TableColumn<EmployeeJavaFX, String> fullNameCol = new TableColumn<>("ФИО");
-//            fullNameCol.setCellValueFactory(cell -> cell.getValue().fullNameProperty());
-//            TableColumn<EmployeeJavaFX, String> positionCol = new TableColumn<>("Должность");
-//            positionCol.setCellValueFactory(cell -> cell.getValue().positionProperty());
-//            TableColumn<EmployeeJavaFX, Number> tabelCol = new TableColumn<>("Табельный №");
-//            tabelCol.setCellValueFactory(cell -> cell.getValue().tabelProperty());
-//            tableEmployee.getColumns().addAll(fullNameCol, positionCol, tabelCol);
-//
-//            for(int z = 0; z < gregorianCalendar.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); z++){
-//                TableColumn<EmployeeJavaFX, String> markColumn = new TableColumn<>(z+1+"");
-//                int finalZ = z;
-//                markColumn.setCellValueFactory(cell -> cell.getValue().propertyMark(finalZ));
-//                tableEmployee.getColumns().add(markColumn);
-//            }
-//
-//            TableColumn<EmployeeJavaFX, String> totalCol = new TableColumn<>("Итого");
-//            totalCol.setCellValueFactory(cell -> cell.getValue().totalProperty());
-//            tableEmployee.getColumns().add(totalCol);
-//        }
     }
     private void departmentToEmployee(Department department) throws SQLException {
         for(int i = 0; i < 12; i++){
